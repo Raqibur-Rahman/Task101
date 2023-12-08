@@ -1,34 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+
 import './App.css'
+import Incomplete from './columns/TaskConditions/Incomplete'
+import Doing from './columns/TaskConditions/Doing'
+import ToDo from './columns/TaskConditions/ToDo'
+import UnderReview from './columns/TaskConditions/UnderReview'
+import Completed from './columns/TaskConditions/Completed'
+
+
 
 function App() {
-  const [count, setCount] = useState(0)
+
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className='flex overflow-x-auto'>
+      <div className='w-96 p-3'>
+        <Incomplete />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+      <div className='w-96 p-3'>
+        <ToDo />
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      <div className='w-64 p-3'>
+        <Doing />
+      </div>
+      <div className='w-64 p-3'>
+        <UnderReview />
+      </div>
+      <div className='w-64 p-3'>
+        <Completed />
+      </div>
+    </div>
   )
 }
 
