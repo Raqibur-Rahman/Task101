@@ -4,23 +4,18 @@ const SingleChat = () => {
 
     const [selectedFiles, setSelectedFiles] = useState([]);
 
-
     const handelAttachmentButton = (event) => {
-        const fileInput = document.getElementById('fileInput');
+        const fileInput = document.getElementById("fileInput");
         fileInput.click();
-        console.log('clicked');
     };
-
-    // const handelAttachmentButton = (event) => {
-    //     // Trigger the hidden file input element
-    //     const fileInput = document.getElementById('fileInput');
-    //     fileInput.click();
-    // };
 
     const handleFileChange = (event) => {
         const files = event.target.files;
-        console.log("Selected Files: ", files);
-        setSelectedFiles(Array.from(files));
+        const newFiles = Array.from(files).map((file) => ({
+            name: file.name,
+            type: file.type,
+        }));
+        setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
     };
 
 
@@ -81,30 +76,34 @@ const SingleChat = () => {
 
                 <div className="flex items-center">
 
-                    <input type="file"
+                    <input
+                        type="file"
                         id="fileInput"
                         multiple
                         className="hidden"
                         onChange={handleFileChange}
-
                     />
 
+
+
                     <button onClick={handelAttachmentButton}>
-                        <img className="w-7 h-7 p-1" src="https://cdn-icons-png.flaticon.com/512/54/54719.png" alt="" />
+                        <img
+                            className="w-7 h-7 p-1"
+                            src="https://cdn-icons-png.flaticon.com/512/54/54719.png"
+                            alt=""
+                        />
                     </button>
-
                     <div>
-                        {selectedFiles.map((file, index) => {
+                        {selectedFiles.map((file, index) => (
                             <div key={index}>
-                                {file.name}({file.type})
+                                {file.name} ({file.type})
                             </div>
-                        })}
-
+                        ))}
                     </div>
 
 
 
-                    <p>25</p>
+                    <p>{selectedFiles.length}</p>
                 </div>
 
                 <div className="flex items-center">

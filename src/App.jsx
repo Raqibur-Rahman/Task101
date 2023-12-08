@@ -12,21 +12,21 @@ function App() {
 
 
   return (
-    <div className="overflow-x-auto">
-      <div className="grid grid-cols-5 gap-96 overflow-x-auto">
-        <div className="w-96 p-3 overflow-x-auto m-3">
+    <div className="overflow-x-auto mt-0">
+      <div className="grid grid-cols-5 gap-96 overflow-x-auto mt-0">
+        <div className="w-96 p-3 overflow-x-auto ">
           <Incomplete />
         </div>
-        <div className="w-96 p-3 overflow-x-auto m-3">
+        <div className="w-96 p-3 overflow-x-auto ">
           <ToDo />
         </div>
-        <div className="w-96 p-3 overflow-x-auto m-3">
+        <div className="w-96 p-3 overflow-x-auto ">
           <Doing />
         </div>
-        <div className="w-96 p-3 overflow-x-auto m-3">
+        <div className="w-96 p-3 overflow-x-auto ">
           <UnderReview />
         </div>
-        <div className="w-96 p-3 overflow-x-auto m-3">
+        <div className="w-96 p-3 overflow-x-auto ">
           <Completed />
         </div>
       </div>
