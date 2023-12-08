@@ -1,4 +1,30 @@
+import { useState } from "react";
+
 const SingleChat = () => {
+
+    const [selectedFiles, setSelectedFiles] = useState([]);
+
+
+    const handelAttachmentButton = (event) => {
+        const fileInput = document.getElementById('fileInput');
+        fileInput.click();
+        console.log('clicked');
+    };
+
+    // const handelAttachmentButton = (event) => {
+    //     // Trigger the hidden file input element
+    //     const fileInput = document.getElementById('fileInput');
+    //     fileInput.click();
+    // };
+
+    const handleFileChange = (event) => {
+        const files = event.target.files;
+        console.log("Selected Files: ", files);
+        setSelectedFiles(Array.from(files));
+    };
+
+
+
     return (
         <div className="p-1 m-1 mt-5 bg-white">
 
@@ -54,7 +80,30 @@ const SingleChat = () => {
 
 
                 <div className="flex items-center">
-                    <img className="w-7 h-7 p-1" src="https://cdn-icons-png.flaticon.com/512/54/54719.png" alt="" />
+
+                    <input type="file"
+                        id="fileInput"
+                        multiple
+                        className="hidden"
+                        onChange={handleFileChange}
+
+                    />
+
+                    <button onClick={handelAttachmentButton}>
+                        <img className="w-7 h-7 p-1" src="https://cdn-icons-png.flaticon.com/512/54/54719.png" alt="" />
+                    </button>
+
+                    <div>
+                        {selectedFiles.map((file, index) => {
+                            <div key={index}>
+                                {file.name}({file.type})
+                            </div>
+                        })}
+
+                    </div>
+
+
+
                     <p>25</p>
                 </div>
 

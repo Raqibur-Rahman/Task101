@@ -12,23 +12,26 @@ function App() {
 
 
   return (
-    <div className='flex overflow-x-auto'>
-      <div className='w-96 p-3'>
-        <Incomplete />
-      </div>
-      <div className='w-96 p-3'>
-        <ToDo />
-      </div>
-      <div className='w-64 p-3'>
-        <Doing />
-      </div>
-      <div className='w-64 p-3'>
-        <UnderReview />
-      </div>
-      <div className='w-64 p-3'>
-        <Completed />
+    <div className="overflow-x-auto">
+      <div className="grid grid-cols-5 gap-96 overflow-x-auto">
+        <div className="w-96 p-3 overflow-x-auto m-3">
+          <Incomplete />
+        </div>
+        <div className="w-96 p-3 overflow-x-auto m-3">
+          <ToDo />
+        </div>
+        <div className="w-96 p-3 overflow-x-auto m-3">
+          <Doing />
+        </div>
+        <div className="w-96 p-3 overflow-x-auto m-3">
+          <UnderReview />
+        </div>
+        <div className="w-96 p-3 overflow-x-auto m-3">
+          <Completed />
+        </div>
       </div>
     </div>
+
   )
 }
 
