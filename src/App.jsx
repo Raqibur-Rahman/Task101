@@ -12,7 +12,7 @@ function App() {
 
 
   return (
-    <div className="overflow-x-auto mt-0">
+    <div className="overflow-x-auto mt-0 pt-0">
       <div className="grid grid-cols-5 gap-96 overflow-x-auto mt-0">
         <div className="w-96 p-3 overflow-x-auto ">
           <Incomplete />

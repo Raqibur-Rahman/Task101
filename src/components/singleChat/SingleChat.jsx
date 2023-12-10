@@ -1,23 +1,88 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import Swal from "sweetalert2";
 
 const SingleChat = () => {
-
+    const [isModalVisible, setModalVisible] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState([]);
 
-    const handelAttachmentButton = (event) => {
-        const fileInput = document.getElementById("fileInput");
-        fileInput.click();
+    const sendFiles = async () => {
+        try {
+            if (selectedFiles.length === 0) {
+                // No files selected, show a warning message instead of success
+                Swal.fire(
+                    'No Files Selected',
+                    'Please choose one or more files to upload.',
+                    'warning'
+                );
+                return;
+            }
+
+            const formData = new FormData();
+            selectedFiles.forEach((file) => {
+                formData.append("files", file);
+            });
+
+            const response = await fetch("https://task101server-production.up.railway.app/upload", {
+                method: "POST",
+                body: formData,
+
+            });
+
+            const json = await response.json();
+
+
+            Swal.fire({
+                title: "File Upload <strong>Successful!</strong>",
+                icon: "success",
+                html: `
+                  You can view 
+                  <a id="viewLink" href="https://task101server-production.up.railway.app/allfiles" target="_blank"> <b>database api here</b> </a>
+                `,
+                showCloseButton: true,
+                showCancelButton: true,
+                focusConfirm: false,
+                confirmButtonText: `
+                  View
+                `,
+                confirmButtonAriaLabel: "Thumbs up, great!",
+                cancelButtonText: `
+                  Close
+                `,
+                cancelButtonAriaLabel: "Thumbs down"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to the specified URL in a new tab when the "View" button is clicked
+                    window.open(document.getElementById("viewLink").href, '_blank');
+                }
+            });
+
+
+            console.log(json);
+            setModalVisible(false);
+        } catch (error) {
+            console.error("Error uploading files:", error);
+        }
     };
 
-    const handleFileChange = (event) => {
+
+    const handleFileChange = useCallback((event) => {
         const files = event.target.files;
-        const newFiles = Array.from(files).map((file) => ({
-            name: file.name,
-            type: file.type,
-        }));
-        setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
+        setSelectedFiles(Array.from(files));
+    }, []);
+
+    const closeModal = () => {
+        setModalVisible(false);
     };
 
+    const handelFormSubmit = (event) => {
+        event.preventDefault();
+        // console.log("Upload button clicked!");
+        sendFiles();
+    };
+    const handelAttachmentButton = () => {
+        setModalVisible(true);
+
+    };
 
 
     return (
@@ -85,7 +150,6 @@ const SingleChat = () => {
                     />
 
 
-
                     <button onClick={handelAttachmentButton}>
                         <img
                             className="w-7 h-7 p-1"
@@ -93,26 +157,96 @@ const SingleChat = () => {
                             alt=""
                         />
                     </button>
-                    <div>
-                        {selectedFiles.map((file, index) => (
-                            <div key={index}>
-                                {file.name} ({file.type})
-                            </div>
-                        ))}
-                    </div>
+
+
+
+
+
 
 
 
                     <p>{selectedFiles.length}</p>
+                    {/* Modal */}
+                    {isModalVisible && (
+                        <div className="fixed inset-0 z-10 overflow-y-auto ">
+                            <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+                                    <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                                </div>
+
+                                {/* Modal Content */}
+                                <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                                <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                    <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                        <h3 className="text-lg font-medium leading-6 text-gray-900">Upload Files</h3>
+                                        <p className="mt-1 text-sm text-gray-500">Select one or more files to upload.</p>
+
+                                        {/* File Input */}
+                                        <div className="mt-4">
+                                            <form id="uploadForm" encType="multipart/form-data">
+                                                <label htmlFor="myFiles" className="sr-only">
+                                                    Choose files
+                                                </label>
+                                                <input
+                                                    type="file"
+                                                    id="myFiles"
+                                                    accept="*"
+                                                    multiple
+                                                    className="appearance-none bg-white border border-gray-300 p-2 rounded-md"
+                                                    onChange={handleFileChange}
+                                                />
+
+                                                {/* Selected Files List */}
+                                                {selectedFiles.length > 0 && (
+                                                    <div className="mt-2 text-sm text-gray-700">
+                                                        <p className="font-bold">Selected Files:</p>
+                                                        <ul>
+                                                            {selectedFiles.map((file, index) => (
+                                                                <li key={index}>
+                                                                    {file.name} ({file.type})
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                )}
+
+                                                {/* Submit Button */}
+                                                <button
+                                                    onClick={handelFormSubmit}
+                                                    type="button"
+                                                    className="mt-4 w-full bg-green-600 text-white rounded-md px-4 py-2 hover:bg-green-700 focus:outline-none"
+                                                >
+                                                    Upload
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    {/* Close Button */}
+                                    <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                        <button
+                                            onClick={closeModal}
+                                            type="button"
+                                            className="w-full bg-indigo-600 text-white rounded-md px-4 py-2 hover:bg-indigo-700 focus:outline-none"
+                                        >
+                                            Close
+                                        </button>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    )}
+
                 </div>
 
                 <div className="flex items-center">
                     <img className="w-7 h-7 p-1" src="https://cdn-icons-png.flaticon.com/512/2278/2278049.png" alt="" />
                     <p>12-23-2023</p>
                 </div>
-
-
-
 
             </div>
 
