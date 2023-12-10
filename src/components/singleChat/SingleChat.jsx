@@ -1,9 +1,25 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Swal from "sweetalert2";
 
 const SingleChat = () => {
     const [isModalVisible, setModalVisible] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState([]);
+    const [totalFiles, setTotalFiles] = useState(0);
+
+
+    useEffect(() => {
+        const fetchTotalFiles = async () => {
+          try {
+            const response = await fetch("https://task101server-production.up.railway.app/allfiles");
+            const data = await response.json();
+            setTotalFiles(data.length); // Assuming the API returns an array of files
+          } catch (error) {
+            console.error("Error fetching total files:", error);
+          }
+        };
+    
+        fetchTotalFiles();
+      }, []); 
 
     const sendFiles = async () => {
         try {
@@ -165,7 +181,7 @@ const SingleChat = () => {
 
 
 
-                    <p>{selectedFiles.length}</p>
+                    <p>{totalFiles}</p>
                     {/* Modal */}
                     {isModalVisible && (
                         <div className="fixed inset-0 z-10 overflow-y-auto ">
